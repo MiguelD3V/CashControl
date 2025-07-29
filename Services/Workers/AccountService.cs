@@ -34,7 +34,14 @@ namespace Cashcontrol.API.Services.Workers
                 };
             }
 
-            var account = _mapper.Map<Account>(accountDto);
+            var account = new Account
+            {
+                Name = accountDto.Name,
+                Type = accountDto.Type,
+                Email = accountDto.Email,
+                Balance = 0,
+                CreatedAt = DateTime.UtcNow
+            };
 
             await _accountRepository.CreateAsync(account);
 
@@ -63,6 +70,17 @@ namespace Cashcontrol.API.Services.Workers
             return accountDtos;
         }
 
+        public async Task<AccountResponseDto> GetByEmailAsync(string email)
+        {
+            var account = await _accountRepository.GetByEmailAsync(email);
+            if (account == null)
+            {
+                throw new Exception($"Account with email {email} not found.");
+            }
+            var accountDto = _mapper.Map<AccountResponseDto>(account);
+            return accountDto;
+        }
+
         public async Task<AccountResponseDto> GetByIdAsync(Guid id)
         {
             var account = await _accountRepository.GetByIdAsync(id);
@@ -74,11 +92,24 @@ namespace Cashcontrol.API.Services.Workers
             return accountDto;
         }
 
-        public async Task<AccountResponseDto> UpdateAsync(AccountRequestDto account)
-        {
-            var accountModel = _mapper.Map<Account>(account);
 
-            var validation = _validator.ValidateToUpdate(accountModel);
+        public async Task<AccountResponseDto> UpdateAsync(string email, AccountUpdateRequestDto account)
+        {
+            var findAccount = await _accountRepository.GetByEmailAsync(email);
+            if (findAccount == null)
+            {
+                return new AccountResponseDto
+                {
+                    Success = false,
+                    Errors = new List<string> { "Conta não encontrada." }
+                };
+            }
+
+            // Atualiza a entidade já rastreada
+            findAccount.Name = account.Name;
+            findAccount.Type = account.Type;
+
+            var validation = _validator.ValidateToUpdate(findAccount);
             if (!validation.Success)
             {
                 return new AccountResponseDto
@@ -88,12 +119,12 @@ namespace Cashcontrol.API.Services.Workers
                 };
             }
 
-            await _accountRepository.UpdateAsync(accountModel);
+            await _accountRepository.UpdateAsync(findAccount);
 
             return new AccountResponseDto
             {
                 Success = true,
-                Data = accountModel
+                Data = findAccount
             };
         }
     }

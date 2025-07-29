@@ -20,6 +20,8 @@ namespace Cashcontrol.API.Banco
                 entity.HasKey(a => a.Id);
                 entity.Property(a => a.Name).IsRequired().HasMaxLength(100);
                 entity.Property(a => a.Type).HasConversion<string>();
+                entity.Property(a => a.Email).IsRequired().HasMaxLength(255);
+                entity.HasIndex(a => a.Email).IsUnique().HasDatabaseName("IX_Accounts_Email");
                 entity.Property(a => a.Balance).HasColumnType("decimal(18,2)");
                 entity.Property(a => a.CreatedAt).IsRequired();
 

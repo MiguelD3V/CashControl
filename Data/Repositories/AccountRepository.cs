@@ -30,6 +30,12 @@ namespace Cashcontrol.API.Data.Repositories
             return [.. accounts];
         }
 
+        public async Task<Account> GetByEmailAsync(string email)
+        {
+            var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Email == email);
+            return account ?? throw new Exception($"A Conta com o email {email} não foi encontrada.");
+        }
+
         public async Task<Account> GetByIdAsync(Guid id)
         {
            var account =  await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
@@ -42,14 +48,12 @@ namespace Cashcontrol.API.Data.Repositories
             return account ?? throw new Exception($"A Conta com o nome {name} não foi encontrada.");
         }
 
+
         public async Task<Account?> UpdateAsync(Account account)
         {
-             var find = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == account.Id) ?? throw new Exception($"A Conta com o ID {account.Id} não foi encontrada.");
-            account.Id = (find).Id;
             _context.Accounts.Update(account);
             await _context.SaveChangesAsync();
-            var updatedAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == account.Id);
-            return updatedAccount;
+            return account;
         }
     }
 }

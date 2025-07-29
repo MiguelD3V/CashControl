@@ -1,6 +1,0 @@
-@Fina_HostAddress = http://localhost:5126
-
-GET {{Fina_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -12,6 +12,8 @@ namespace Cashcontrol.API.Mapping
             CreateMap<Expense, ExpenseRequestDto>();
             CreateMap<ExpenseRequestDto, Expense>();
             CreateMap<Expense, ExpenseRequestDto>();
+
+            CreateMap<Account, AccountRequestDto>();
         }
     }
 }

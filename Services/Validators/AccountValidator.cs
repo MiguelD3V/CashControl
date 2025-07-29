@@ -1,6 +1,7 @@
 ﻿using Cashcontrol.API.Models.Bussines;
 using Cashcontrol.API.Models.Dtos;
 using Cashcontrol.API.Services.Validators.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Cashcontrol.API.Services.Validators
 {
@@ -24,17 +25,18 @@ namespace Cashcontrol.API.Services.Validators
                 response.Errors.Add("Account name cannot be null");
                 return response;
             }
-           
+            if(Regex.IsMatch(account.Email ?? string.Empty, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") == false)
+            {
+                response.Success = false;
+                response.Errors.Add("Invalid email format");
+                return response;
+            }
+
             if (!Enum.IsDefined(typeof(AccountType), account.Type))
             {
                 response.Success = false;
                 response.Errors.Add("Invalid account type");
                 return response;
-            }
-            if (account.Balance < 0)
-            {
-                response.Success = false;
-                response.Errors.Add("Account balance cannot be negative");
             }
             if (response.Errors.Count == 0)
             {

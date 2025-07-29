@@ -11,5 +11,6 @@ namespace Cashcontrol.API.Data.Interfaces
         public Task<ImmutableList<Account>> GetAllAsync();
         public Task<Account> GetByIdAsync(Guid id);
         public Task<Account> GetByNameAsync(string name);
+        public Task<Account> GetByEmailAsync(string email);
     }
 }
