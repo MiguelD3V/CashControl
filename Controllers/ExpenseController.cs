@@ -16,47 +16,37 @@ namespace Cashcontrol.API.Controllers
         {
             _expenseService = expenseService;
         }
-              
+
         [HttpPost]
-        public async Task<ActionResult<Expense>> Create(ExpenseRequestDto expense)
+        public async Task<ActionResult<ExpenseResponseDto>> Create(ExpenseRequestDto expense)
         {
             try
             {
-                var createdExpense =  await _expenseService.CreateExpenseAsync(expense);
+                var createdExpense = await _expenseService.CreateExpenseAsync(expense);
                 return createdExpense;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
 
             }
-       
-        }
-       
-        //[HttpPut]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
 
-        //[HttpPost]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        }
+
+        [HttpPut("{id}")]
+        public async  Task<ActionResult<ExpenseResponseDto>> Edit(Guid id, ExpenseRequestDto expense)
+        {
+            try
+            { 
+                var updatedExpense = await _expenseService.UpdateExpenseAsync(id, expense);
+                return updatedExpense;
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
     }
 }

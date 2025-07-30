@@ -39,7 +39,7 @@ namespace Cashcontrol.API.Banco.Repositories
 
         public async Task<Expense> GetById(Guid id)
         {
-            var expense = await _context.Expenses.FirstOrDefaultAsync(a => a.Id == id);
+            var expense = await _context.Expenses.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
             if (expense == null)
             {
                 throw new Exception($"A Despesa com {id} Não foi encontrada.");
@@ -59,9 +59,6 @@ namespace Cashcontrol.API.Banco.Repositories
 
         public async Task Update (Expense expense)
         {
-            var Find = await _context.Expenses.FirstOrDefaultAsync(a => a.Id == expense.Id) ?? throw new Exception($"A Despesa com {expense.Id} Não foi encontrada.");
-
-            expense.Id = Find.Id;
             _context.Expenses.Update(expense);
             await _context.SaveChangesAsync();
         }
