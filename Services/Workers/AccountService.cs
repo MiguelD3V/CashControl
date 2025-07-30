@@ -66,8 +66,18 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IImmutableList<AccountResponseDto>> GetAllAsync()
         {
             var accounts = await _accountRepository.GetAllAsync();
-            var accountDtos = accounts.Select(a => _mapper.Map<AccountResponseDto>(a)).ToImmutableList();
-            return accountDtos;
+             
+            
+            return accounts
+                .Select(Account => new AccountResponseDto
+                {
+                    Name = Account.Name,
+                    Type = Account.Type,
+                    Email = Account.Email,
+                    Balance = Account.Balance,
+                    CreatedAt = Account.CreatedAt
+
+                }).ToList().ToImmutableList();
         }
 
         public async Task<AccountResponseDto> GetByEmailAsync(string email)
@@ -88,7 +98,15 @@ namespace Cashcontrol.API.Services.Workers
             {
                 throw new Exception($"Account with ID {id} not found.");
             }
-            var accountDto = _mapper.Map<AccountResponseDto>(account);
+            var accountDto = new AccountResponseDto
+            {
+                Name = account.Name,
+                Balance = account.Balance,
+                Email = account.Email,
+                Type = account.Type,
+                CreatedAt = account.CreatedAt
+            };
+
             return accountDto;
         }
 
@@ -105,7 +123,6 @@ namespace Cashcontrol.API.Services.Workers
                 };
             }
 
-            // Atualiza a entidade já rastreada
             findAccount.Name = account.Name;
             findAccount.Type = account.Type;
 

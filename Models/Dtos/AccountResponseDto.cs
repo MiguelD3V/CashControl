@@ -6,6 +6,7 @@ namespace Cashcontrol.API.Models.Dtos
     {
         public string Name { get; set; } = string.Empty;
         public decimal Balance { get; set; }
+        public string Email { get; set; } = string.Empty;
         public AccountType Type { get; set; }
         public DateTime CreatedAt { get; set; }
     }

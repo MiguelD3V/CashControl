@@ -14,6 +14,15 @@ namespace Cashcontrol.API.Mapping
             CreateMap<Expense, ExpenseRequestDto>();
 
             CreateMap<Account, AccountRequestDto>();
+            CreateMap<AccountResponseDto, Account>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>src.Name))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Balance))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+
+            CreateMap<AccountResponseDto, AccountRequestDto>();
+
+
         }
     }
 }
