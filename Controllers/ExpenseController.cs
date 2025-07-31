@@ -4,6 +4,7 @@ using Cashcontrol.API.Services.Workers;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
 
 namespace Cashcontrol.API.Controllers
 {
@@ -34,14 +35,55 @@ namespace Cashcontrol.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async  Task<ActionResult<ExpenseResponseDto>> Edit(Guid id, ExpenseRequestDto expense)
+        public async Task<ActionResult<ExpenseResponseDto>> Edit(Guid id, ExpenseRequestDto expense)
         {
             try
-            { 
+            {
                 var updatedExpense = await _expenseService.UpdateExpenseAsync(id, expense);
                 return updatedExpense;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ExpenseResponseDto>> Delete(Guid id)
+        {
+            try
+            {
+                var deletedExpense = await _expenseService.DeleteExpenseAsync(id);
+                return deletedExpense;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ImmutableList<ExpenseResponseDto>>> GetAll()
+        {
+            try
+            {
+                var expenses = await _expenseService.GetAllExpensesAsync();
+                return expenses;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ExpenseResponseDto>> GetById(Guid id)
+        {
+            try
+            {
+                var expense = await _expenseService.GetExpenseById(id);
+                return expense;
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }

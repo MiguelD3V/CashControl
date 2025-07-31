@@ -20,14 +20,10 @@ namespace Cashcontrol.API.Banco.Repositories
            await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(Expense expense)
         {
-            var expense = _context.Expenses.Find(id);
-            if (expense != null)
-            {
                 _context.Expenses.Remove(expense);
                 await _context.SaveChangesAsync();
-            }
         }
 
         public async Task<ImmutableList<Expense>> GetAll()

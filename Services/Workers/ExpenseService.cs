@@ -59,12 +59,16 @@ namespace Cashcontrol.API.Services.Workers
             {
                 throw new ArgumentException("Invalid ID", nameof(id));
             }
-            var expense = await _expenseRepository.GetById(id);
-            if (expense == null)
+            var getExpense = await _expenseRepository.GetById(id);
+            if (getExpense == null)
             {
                 throw new Exception($"Expense with ID {id} not found.");
             }
-            await _expenseRepository.Delete(id);
+            var account = await _accountRepository.GetByIdAsync(getExpense.AccountId);
+            account.Balance += getExpense.Amount;
+
+            await _accountRepository.UpdateAsync(account);
+            await _expenseRepository.Delete(getExpense);
             return new ExpenseResponseDto
             {
                 Success = true,
@@ -150,13 +154,12 @@ namespace Cashcontrol.API.Services.Workers
 
             var account = await _accountRepository.GetByIdAsync(expense.AccountId);
 
-            account.Balance -= diference;
+            account.Balance += diference;
 
             var mapExpense = new Expense 
             { 
                 Name = expense.Name,
                 Description = expense.Description,
-                Date = DateTime.UtcNow.Date,
                 Amount = expense.Amount,
                 AccountId = expense.AccountId,
                 Category = expense.Category
