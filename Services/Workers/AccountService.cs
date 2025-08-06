@@ -34,14 +34,7 @@ namespace Cashcontrol.API.Services.Workers
                 };
             }
 
-            var account = new Account
-            {
-                Name = accountDto.Name,
-                Type = accountDto.Type,
-                Email = accountDto.Email,
-                Balance = 0,
-                CreatedAt = DateTime.UtcNow
-            };
+            var account = _mapper.Map<Account>(accountDto);
 
             await _accountRepository.CreateAsync(account);
 

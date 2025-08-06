@@ -40,7 +40,7 @@ namespace Cashcontrol.API.Services.Workers
 
             if (expense == null)
             {
-                throw new ArgumentNullException(nameof(expense), "Expense cannot be null");
+                throw new ArgumentNullException(nameof(expense), "A despesa não pode ser nula");
             }
 
             await _expenseRepository.Create(ExpenseDto);
@@ -57,7 +57,7 @@ namespace Cashcontrol.API.Services.Workers
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentException("Invalid ID", nameof(id));
+                throw new ArgumentException("Id Inválido", nameof(id));
             }
             var getExpense = await _expenseRepository.GetById(id);
             if (getExpense == null)

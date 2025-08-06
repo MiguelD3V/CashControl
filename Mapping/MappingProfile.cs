@@ -12,6 +12,7 @@ namespace Cashcontrol.API.Mapping
             CreateMap<Expense, ExpenseRequestDto>();
             CreateMap<ExpenseRequestDto, Expense>();
             CreateMap<Expense, ExpenseRequestDto>();
+            CreateMap<AccountRequestDto, Account>();
 
             CreateMap<Account, AccountRequestDto>();
             CreateMap<AccountResponseDto, Account>()
@@ -21,6 +22,7 @@ namespace Cashcontrol.API.Mapping
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
             CreateMap<AccountResponseDto, AccountRequestDto>();
+            
 
 
         }

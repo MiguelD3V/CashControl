@@ -2,11 +2,9 @@
 {
     public enum AccountType
     {
-        Checking,
-        Savings,
-        Wallet,
-        Bussiness,
-        Investment,
+        Corrente,
+        Poupança,
+        Empresarial,
 
     }
 }

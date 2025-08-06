@@ -2,13 +2,13 @@
 {
     public enum IncomeSource
     {
-        Salary,
-        Business,
-        Investment,
-        Rental,
+        Salário,
+        Negócio,
+        Investimentos,
+        Aluguel,
         Freelance,
-        Gift,
-        Pension,
-        Other
+        Presente,
+        Pensão,
+        Outros
     }
 }
