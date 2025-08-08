@@ -1,4 +1,6 @@
-﻿namespace Cashcontrol.API.Models.Bussines
+﻿using System.Text.Json.Serialization;
+
+namespace Cashcontrol.API.Models.Bussines
 {
     public class Income
     {
@@ -7,6 +9,7 @@
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public Guid AccountId { get; set; }
+        [JsonIgnore]
         public Account? Account { get; set; }
         public IncomeSource Source { get; set; }
     }

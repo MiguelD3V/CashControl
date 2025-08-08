@@ -41,6 +41,8 @@ namespace Cashcontrol.API.Services.Workers
             var account = _accountRepository.GetByIdAsync(income.AccountId);
             account.Result.Balance += income.Amount;
 
+            incomeDto.Date = DateTime.UtcNow;
+
             await _accountRepository.UpdateAsync(account.Result);
             await _incomeRepository.CreateAsync(incomeDto);
             return new IncomeResponseDto
@@ -52,7 +54,7 @@ namespace Cashcontrol.API.Services.Workers
 
         public async Task<IncomeResponseDto> DeleteAsync(Guid id)
         {
-            var incomeFind = _incomeRepository.GetByIdAsync(id);
+            var incomeFind = await _incomeRepository.GetByIdAsync(id);
             if (incomeFind == null)
             {
                 return new IncomeResponseDto
@@ -61,7 +63,7 @@ namespace Cashcontrol.API.Services.Workers
                     Errors = new List<string> { "Income not found" }
                 };
             }
-            var incomeModel = _mapper.Map<Income>(incomeFind);
+            var incomeModel =  _mapper.Map<Income>(incomeFind);
 
             var account = await _accountRepository.GetByIdAsync(incomeModel.AccountId);
             if (account == null)
@@ -87,27 +89,27 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IImmutableList<IncomeResponseDto>> GetAllAsync()
         {
             var incomes = await _incomeRepository.GetAllAsync();
-            var incomeDtos = _mapper.Map<IImmutableList<IncomeResponseDto>>(incomes);
-            return incomeDtos;
+            var incomeDtos = _mapper.Map<List<IncomeResponseDto>>(incomes);
+            return incomeDtos.ToImmutableList();
         }
 
-        public Task<IncomeResponseDto> GetByIdAsync(Guid id)
+        public async Task<IncomeResponseDto> GetByIdAsync(Guid id)
         {
-            var income = _incomeRepository.GetByIdAsync(id);
+            var income = await _incomeRepository.GetByIdAsync(id);
             if (income == null)
             {
-                return Task.FromResult(new IncomeResponseDto
-                {
-                    Success = false,
-                    Errors = new List<string> { "Income not found" }
-                });
+                return new IncomeResponseDto
+                { 
+                     Success = false,
+                     Errors = new List<string> { "Income not found" }
+                };
             }
             var incomeDto = _mapper.Map<IncomeResponseDto>(income);
-            return Task.FromResult(new IncomeResponseDto
+            return  new IncomeResponseDto
             {
                 Success = true,
-                Data = incomeDto.Data
-            });
+                Data = incomeDto
+            };
         }
 
         public async Task<IncomeResponseDto> UpdateAsync(IncomeRequestDto income, Guid id)

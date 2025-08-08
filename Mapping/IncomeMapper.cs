@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cashcontrol.API.Models.Bussines;
 using Cashcontrol.API.Models.Dtos;
+using System.Collections.Immutable;
 
 namespace Cashcontrol.API.Mapping
 {
@@ -14,6 +15,7 @@ namespace Cashcontrol.API.Mapping
             CreateMap<IncomeResponseDto, Income>();
             CreateMap<IncomeRequestDto, IncomeResponseDto>();
             CreateMap<IncomeResponseDto, IncomeRequestDto>();
+            CreateMap<Income, IncomeResponseDto>();
         }
     }
 }
