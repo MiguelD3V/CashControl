@@ -78,7 +78,7 @@ namespace Cashcontrol.API.Services.Workers
             var account = await _accountRepository.GetByEmailAsync(email);
             if (account == null)
             {
-                throw new Exception($"Account with email {email} not found.");
+                throw new Exception($"Conta com email: {email} não foi encontrada.");
             }
             var accountDto = _mapper.Map<AccountResponseDto>(account);
             return accountDto;
@@ -89,16 +89,9 @@ namespace Cashcontrol.API.Services.Workers
             var account = await _accountRepository.GetByIdAsync(id);
             if (account == null)
             {
-                throw new Exception($"Account with ID {id} not found.");
+                throw new Exception($"Conta com ID {id} não foi encontrada.");
             }
-            var accountDto = new AccountResponseDto
-            {
-                Name = account.Name,
-                Balance = account.Balance,
-                Email = account.Email,
-                Type = account.Type,
-                CreatedAt = account.CreatedAt
-            };
+            var accountDto = _mapper.Map<AccountResponseDto>(account);
 
             return accountDto;
         }

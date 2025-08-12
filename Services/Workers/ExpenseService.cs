@@ -4,6 +4,7 @@ using Cashcontrol.API.Banco.Repositories;
 using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Models.Bussines;
 using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using System.Collections.Immutable;
 
@@ -14,25 +15,28 @@ namespace Cashcontrol.API.Services.Workers
         private readonly IExpenseRepository _expenseRepository;
         private readonly IMapper _mapper;
         private readonly IAccountRepository _accountRepository;
+        private readonly IExpenseValidator _validator;
 
-        public ExpenseService(IExpenseRepository expenseRepository, IMapper mapper, IAccountRepository accountRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, IMapper mapper, IAccountRepository accountRepository, IExpenseValidator validator)
         {
             _expenseRepository = expenseRepository;
             _mapper = mapper;
             _accountRepository = accountRepository;
+            _validator = validator;
         }
 
         public async Task<ExpenseResponseDto> CreateExpenseAsync(ExpenseRequestDto expense)
         { 
-            var ExpenseDto = new Expense
+            var expenseModel = _mapper.Map<Expense>(expense);
+            var validation = _validator.ValidateToCreate(expenseModel);
+            if (!validation.Success)
             {
-                Name = expense.Name,
-                Description = expense.Description,
-                Date = DateTime.UtcNow.Date,
-                Amount = expense.Amount,
-                AccountId = expense.AccountId,
-                Category = expense.Category
-            };
+                return new ExpenseResponseDto
+                {
+                    Success = false,
+                    Errors = validation.Errors
+                };
+            }
 
             var account = await _accountRepository.GetByIdAsync(expense.AccountId);
 
@@ -43,12 +47,12 @@ namespace Cashcontrol.API.Services.Workers
                 throw new ArgumentNullException(nameof(expense), "A despesa não pode ser nula");
             }
 
-            await _expenseRepository.Create(ExpenseDto);
+            await _expenseRepository.Create(expenseModel);
             
             return new ExpenseResponseDto 
             {
                 Success = true,
-                Data = ExpenseDto,
+                Data = expenseModel,
             };
 
         }
@@ -62,7 +66,7 @@ namespace Cashcontrol.API.Services.Workers
             var getExpense = await _expenseRepository.GetById(id);
             if (getExpense == null)
             {
-                throw new Exception($"Expense with ID {id} not found.");
+                throw new Exception($"A depesa com Id{id} não foi encontrada.");
             }
             var account = await _accountRepository.GetByIdAsync(getExpense.AccountId);
             account.Balance += getExpense.Amount;
@@ -72,7 +76,7 @@ namespace Cashcontrol.API.Services.Workers
             return new ExpenseResponseDto
             {
                 Success = true,
-                Message = $"Expense with ID {id} deleted successfully."
+                Message = $"A Despesa com Id:{id} Foi deletada com sucesso."
             };
         }
 
@@ -81,7 +85,7 @@ namespace Cashcontrol.API.Services.Workers
             var expenses = await _expenseRepository.GetAll();
             if (expenses == null || !expenses.Any())
             {
-                throw new Exception("No expenses found.");
+                throw new Exception("Nenhuma despesa foi encontrada.");
             }
             expenses.ToImmutableList<Expense>();
 
@@ -103,7 +107,7 @@ namespace Cashcontrol.API.Services.Workers
             var expense = await _expenseRepository.GetById(id);
             if (expense == null)
             {
-                throw new Exception($"Expense with ID {id} not found.");
+                throw new Exception($"Despesa com ID: {id} Não foi encontrada.");
             }
             return new ExpenseResponseDto 
             {
@@ -117,7 +121,7 @@ namespace Cashcontrol.API.Services.Workers
             var expense = await _expenseRepository.GetByName(name);
             if (expense == null)
             {
-                throw new Exception($"Expense with name {name} not found.");
+                throw new Exception($"Despesa com nome: {name} Não foi encontrada.");
             }
             return new ExpenseResponseDto
             { 
@@ -143,11 +147,24 @@ namespace Cashcontrol.API.Services.Workers
 
         public async Task<ExpenseResponseDto> UpdateExpenseAsync(Guid id, ExpenseRequestDto expense)
         {
+            var expenseModel = _mapper.Map<Expense>(expense);
+
             var existingExpense = await _expenseRepository.GetById(id);
+
+            var validation = _validator.ValidateToUpdate(expenseModel);
+            
+            if (!validation.Success)
+            {
+                return new ExpenseResponseDto
+                {
+                    Success = false,
+                    Errors = validation.Errors
+                };
+            }
 
             if (existingExpense == null)
             {
-                throw new Exception($"Expense with ID {id} not found.");
+                throw new Exception($"Despesa com ID:{id} não foi encontrada.");
             }
 
             var diference = existingExpense.Amount - expense.Amount;
@@ -156,23 +173,15 @@ namespace Cashcontrol.API.Services.Workers
 
             account.Balance += diference;
 
-            var mapExpense = new Expense 
-            { 
-                Name = expense.Name,
-                Description = expense.Description,
-                Amount = expense.Amount,
-                AccountId = expense.AccountId,
-                Category = expense.Category
-            };
-            mapExpense.Id = id;
+            expenseModel.Id = id;
 
-            await _expenseRepository.Update(mapExpense);
+            await _expenseRepository.Update(expenseModel);
             await _accountRepository.UpdateAsync(account);
 
             return new ExpenseResponseDto 
             {
                 Success = true,
-                Data = mapExpense
+                Data = expenseModel
             };
         }
     }

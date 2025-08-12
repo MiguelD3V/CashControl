@@ -60,7 +60,7 @@ namespace Cashcontrol.API.Services.Workers
                 return new IncomeResponseDto
                 {
                     Success = false,
-                    Errors = new List<string> { "Income not found" }
+                    Errors = new List<string> { "Receita não encontrada" }
                 };
             }
             var incomeModel =  _mapper.Map<Income>(incomeFind);
@@ -71,7 +71,7 @@ namespace Cashcontrol.API.Services.Workers
                 return new IncomeResponseDto
                 {
                     Success = false,
-                    Errors = new List<string> { "Account not found" }
+                    Errors = new List<string> { "Conta não encontrada" }
                 };
             }
             account.Balance -= incomeModel.Amount;
@@ -101,7 +101,7 @@ namespace Cashcontrol.API.Services.Workers
                 return new IncomeResponseDto
                 { 
                      Success = false,
-                     Errors = new List<string> { "Income not found" }
+                     Errors = new List<string> { "Receita não encontrada" }
                 };
             }
             var incomeDto = _mapper.Map<IncomeResponseDto>(income);
@@ -120,7 +120,7 @@ namespace Cashcontrol.API.Services.Workers
                 return (new IncomeResponseDto
                 {
                     Success = false,
-                    Errors = new List<string> { "Income not found" }
+                    Errors = new List<string> { "Receita não encotrada" }
                 });
             }
             var validation = _incomeValidator.ValidateToUpdateAsync(income, id);

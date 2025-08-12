@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 namespace Cashcontrol.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("CashControl/api/[controller]")]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
@@ -52,7 +52,7 @@ namespace Cashcontrol.API.Controllers
                 var account = await _accountService.GetByIdAsync(id);
                 if (account == null)
                 {
-                    return NotFound(new { message = "Account not found" });
+                    return NotFound(new { message = "Conta não encontrada" });
                 }
                 return account;
             }
@@ -82,7 +82,7 @@ namespace Cashcontrol.API.Controllers
                 var deletedAccount = await _accountService.DeleteAsync(id);
                 if (deletedAccount == null)
                 {
-                    return NotFound(new { message = "Account not found" });
+                    return NotFound(new { message = "Conta não encontrada" });
                 }
                 return deletedAccount;
             }

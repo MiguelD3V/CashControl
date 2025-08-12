@@ -16,26 +16,26 @@ namespace Cashcontrol.API.Services.Validators
             if (account == null)
             {
                 response.Success = false;
-                response.Errors.Add("Account cannot be null");
+                response.Errors.Add("A conta não pode ser nula");
                 return response;
             }
             if(account.Name == null)
             {
                 response.Success = false;
-                response.Errors.Add("Account name cannot be null");
+                response.Errors.Add("O nome da conta não pode ser nulo");
                 return response;
             }
             if(Regex.IsMatch(account.Email ?? string.Empty, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") == false)
             {
                 response.Success = false;
-                response.Errors.Add("Invalid email format");
+                response.Errors.Add("Formato de email invalido");
                 return response;
             }
 
             if (!Enum.IsDefined(typeof(AccountType), account.Type))
             {
                 response.Success = false;
-                response.Errors.Add("Invalid account type");
+                response.Errors.Add("Tipo de conta invalido");
                 return response;
             }
             if (response.Errors.Count == 0)
@@ -60,13 +60,13 @@ namespace Cashcontrol.API.Services.Validators
             if (account == null)
             {
                 response.Success = false;
-                response.Errors.Add("Account cannot be null");
+                response.Errors.Add("A conta não pode ser nula");
 
             }
             if (account.Id == Guid.Empty)
             {
                 response.Success = false;
-                response.Errors.Add("Account ID cannot be empty");
+                response.Errors.Add("O Id da conta não pode ser nulo");
             }
             if(response.Errors.Count == 0)
             {
@@ -90,31 +90,21 @@ namespace Cashcontrol.API.Services.Validators
             if (account == null)
             {
                 response.Success = false;
-                response.Errors.Add("Account cannot be null");
+                response.Errors.Add("A conta não pode ser nula");
                 return response;
             }
             if (account.Name == null)
             {
                 response.Success = false;
-                response.Errors.Add("Account name cannot be null");
+                response.Errors.Add("o Nome da conta não pode ser nulo");
                 return response;
             }
 
             if (!Enum.IsDefined(typeof(AccountType), account.Type))
             {
                 response.Success = false;
-                response.Errors.Add("Invalid account type");
+                response.Errors.Add("Tipo de conta invalido");
                 return response;
-            }
-            if (account.Balance < 0)
-            {
-                response.Success = false;
-                response.Errors.Add("Account balance cannot be negative");
-            }
-            if (account.CreatedAt == default)
-            {
-                response.Success = false;
-                response.Errors.Add("Account creation date is required");
             }
             if (response.Errors.Count == 0)
             {

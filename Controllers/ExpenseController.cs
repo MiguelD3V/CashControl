@@ -9,7 +9,7 @@ using System.Collections.Immutable;
 namespace Cashcontrol.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("CashControl/api/[controller]")]
     public class ExpenseController : Controller
     {
         private readonly IExpenseService _expenseService;

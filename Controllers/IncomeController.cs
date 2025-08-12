@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 namespace Cashcontrol.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("CashControl/api/[controller]")]
     public class IncomeController : Controller
     {
         private readonly IIncomeService _incomeService;
@@ -61,7 +61,7 @@ namespace Cashcontrol.API.Controllers
                 var income = await _incomeService.GetByIdAsync(id);
                 if (income == null)
                 {
-                    return NotFound(new { message = "Income not found" });
+                    return NotFound(new { message = "Despesa não encontrada"});
                 }
                 return income;
             }

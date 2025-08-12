@@ -1,6 +1,6 @@
-@CashControl_HostAddress = http://localhost:5126
+@CashControl_HostAddress = http://localhost:7170
 
-GET {{CashControl_HostAddress}}/weatherforecast/
+GET {{CashControl_HostAddress}}/CashControl/api
 Accept: application/json
 
 ###
