@@ -1,6 +1,6 @@
 ﻿using Cashcontrol.API.Models.Bussines;
 
-namespace Cashcontrol.API.Models.Dtos
+namespace Cashcontrol.API.Models.Dtos.Account
 {
     public class AccountRequestDto 
     {

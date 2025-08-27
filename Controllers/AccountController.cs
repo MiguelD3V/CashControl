@@ -1,5 +1,5 @@
 ﻿using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Account;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Immutable;

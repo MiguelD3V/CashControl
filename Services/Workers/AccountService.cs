@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Account;
 using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using System.Collections.Immutable;

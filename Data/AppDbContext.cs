@@ -58,11 +58,24 @@ namespace Cashcontrol.API.Banco
                 entity.Property(i => i.Source).HasConversion<string>();
                 entity.Property(i => i.Date).IsRequired();
             });
+
+            // Tabela de Users
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users");
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Name).IsRequired().HasMaxLength(100);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(255);
+                entity.HasIndex(u => u.Email).IsUnique().HasDatabaseName("IX_Users_Email");
+                entity.Property(u => u.PasswordHash).IsRequired();
+                entity.Property(u => u.PasswordSalt).IsRequired();
+                entity.Property(u => u.CreatedAt).IsRequired();
+            });
         }
 
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Income> Incomes { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
-

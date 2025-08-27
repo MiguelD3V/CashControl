@@ -1,6 +1,6 @@
 ﻿using Cashcontrol.API.Banco.Interfaces;
 using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Expense;
 using Cashcontrol.API.Services.Validators.Interfaces;
 
 namespace Cashcontrol.API.Services.Validators
@@ -30,11 +30,6 @@ namespace Cashcontrol.API.Services.Validators
             {
                 response.Success = false;
                 response.Errors.Add("O valor da despesa não pode ser negativo");
-            }
-            if (expense.Date == default)
-            {
-                response.Success = false;
-                response.Errors.Add("A data da despesa não pode ser nula");
             }
             if (expense.AccountId == Guid.Empty)
             {
@@ -105,11 +100,6 @@ namespace Cashcontrol.API.Services.Validators
                 response.Errors.Add("A Despesa não pode ser nula");
                 return response; 
             }
-            if (expense.Id == Guid.Empty)
-            {
-                response.Success = false;
-                response.Errors.Add("o ID da despesa não pode ser nulo");
-            }
             if (string.IsNullOrWhiteSpace(expense.Name))
             {
                 response.Success = false;
@@ -119,11 +109,6 @@ namespace Cashcontrol.API.Services.Validators
             {
                 response.Success = false;
                 response.Errors.Add("o Valor da despesa precisa ser maior que zero");
-            }
-            if (expense.Date == default)
-            {
-                response.Success = false;
-                response.Errors.Add("A data da despesa é Obrigatória");
             }
             if (expense.AccountId == Guid.Empty)
             {

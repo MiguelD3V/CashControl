@@ -1,4 +1,4 @@
-﻿using Cashcontrol.API.Models.Dtos;
+﻿using Cashcontrol.API.Models.Dtos.Income;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Immutable;

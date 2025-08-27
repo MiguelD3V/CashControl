@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Income;
 using System.Collections.Immutable;
 
 namespace Cashcontrol.API.Mapping

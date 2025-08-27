@@ -1,5 +1,5 @@
 ﻿using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Expense;
 using System.Collections.Immutable;
 
 namespace Cashcontrol.API.Services.Workers.Interfaces

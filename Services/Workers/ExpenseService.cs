@@ -3,7 +3,7 @@ using Cashcontrol.API.Banco.Interfaces;
 using Cashcontrol.API.Banco.Repositories;
 using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Expense;
 using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using System.Collections.Immutable;
@@ -46,6 +46,8 @@ namespace Cashcontrol.API.Services.Workers
             {
                 throw new ArgumentNullException(nameof(expense), "A despesa não pode ser nula");
             }
+
+            expenseModel.Date = DateTime.Now;
 
             await _expenseRepository.Create(expenseModel);
             

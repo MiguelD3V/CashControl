@@ -3,7 +3,7 @@ using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Data.Repositories;
 using Cashcontrol.API.Mapping;
 using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Income;
 using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using System.Collections.Immutable;
@@ -135,7 +135,7 @@ namespace Cashcontrol.API.Services.Workers
 
             var diference = incomeFind.Result.Amount - income.Amount;
             var account = await _accountRepository.GetByIdAsync(income.AccountId);
-            account.Balance += diference;
+            account.Balance -= diference;
 
             var incomeDto = _mapper.Map<Income>(income);
             incomeDto.Id = id;

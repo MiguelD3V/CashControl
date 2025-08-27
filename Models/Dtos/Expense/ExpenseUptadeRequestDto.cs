@@ -1,7 +1,7 @@
 ﻿using Cashcontrol.API.Models.Bussines;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cashcontrol.API.Models.Dtos
+namespace Cashcontrol.API.Models.Dtos.Expense
 {
     public class ExpenseUptadeRequestDto
     {

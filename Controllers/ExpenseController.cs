@@ -1,5 +1,5 @@
 ﻿using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Expense;
 using Cashcontrol.API.Services.Workers;
 using Cashcontrol.API.Services.Workers.Interfaces;
 using Microsoft.AspNetCore.Http;

@@ -1,5 +1,5 @@
 ﻿using Cashcontrol.API.Models.Bussines;
-using Cashcontrol.API.Models.Dtos;
+using Cashcontrol.API.Models.Dtos.Income;
 
 namespace Cashcontrol.API.Services.Validators.Interfaces
 {
