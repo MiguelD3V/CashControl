@@ -1,6 +1,7 @@
 ﻿using Cashcontrol.API.Banco;
 using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Models.Bussines;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cashcontrol.API.Data.Repositories
 {
@@ -29,6 +30,14 @@ namespace Cashcontrol.API.Data.Repositories
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+        public async Task<User?> GetUserByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
         }
     }
 }

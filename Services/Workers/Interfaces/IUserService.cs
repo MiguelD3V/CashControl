@@ -4,8 +4,8 @@ namespace Cashcontrol.API.Services.Workers.Interfaces
 {
     public interface IUserService
     {
-        public Task<AuthResponseDto> RegisterAsync { get; set; }
-        public Task<AuthResponseDto> LoginAsync { get; set; }
+        public Task<UserResponseDto> RegisterAsync(RegistrerRequestDto user);
+        public Task<AuthResponseDto> LoginAsync(LoginRequestDto user);
 
     }
 }

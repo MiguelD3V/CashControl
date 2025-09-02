@@ -69,6 +69,7 @@ namespace Cashcontrol.API.Banco
                 entity.HasIndex(u => u.Email).IsUnique().HasDatabaseName("IX_Users_Email");
                 entity.Property(u => u.PasswordHash).IsRequired();
                 entity.Property(u => u.PasswordSalt).IsRequired();
+                entity.HasKey(u => u.AccountId);
                 entity.Property(u => u.CreatedAt).IsRequired();
             });
         }

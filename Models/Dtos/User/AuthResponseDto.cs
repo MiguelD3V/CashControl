@@ -1,6 +1,6 @@
 ﻿namespace Cashcontrol.API.Models.Dtos.User
 {
-    public class AuthResponseDto
+    public class AuthResponseDto : ResponseBase
     {
         public string Token { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
