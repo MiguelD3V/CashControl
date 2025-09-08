@@ -5,7 +5,7 @@ namespace Cashcontrol.API.Services.Validators.Interfaces
 {
     public interface IUserValidator
     {
-        public UserResponseDto ValidateToRegister(RegistrerRequestDto user);
-        public UserResponseDto ValidateToLogin(LoginRequestDto user);
+        public Task<UserResponseDto> ValidateToRegister(RegistrerRequestDto user);
+        public Task<UserResponseDto> ValidateToLogin(LoginRequestDto user);
     }
 }

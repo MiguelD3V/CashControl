@@ -1,16 +1,22 @@
-﻿namespace Cashcontrol.API.Helpers
+﻿using Cashcontrol.API.Helpers.Interface;
+using Cashcontrol.API.Models.Dtos.User;
+using Microsoft.AspNetCore.Identity;
+
+namespace Cashcontrol.API.Helpers
 {
-    public class PasswordHelper
+    public class PasswordHelper : IPasswordHelper
     {
-        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public PasswordEncryptionResponse CreatePasswordHash(string password)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            { 
+                return new PasswordEncryptionResponse(
+                passwordSalt: hmac.Key,
+                passwordHash: hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password))
+                );
             }
         }
-        public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
