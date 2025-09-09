@@ -94,13 +94,18 @@ namespace Cashcontrol.API.Services.Workers
                     Errors = new List<string> { "Senha incorreta." }
                 };
             }
+            var token = _jwtTokenManager.GenerateToken(new LoginRequestDto
+            {
+                Email = existingUser.Email,
+                Name = existingUser.Name,
+            });
 
             // Sucesso na autenticação
             return new AuthResponseDto
             {
                 Success = true,
                 Message = "Login realizado com sucesso.",
-                Token = _jwtTokenManager.GenerateToken(user)
+                Token = token
             };
         }
     }

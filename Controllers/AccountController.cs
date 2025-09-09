@@ -1,6 +1,7 @@
 ﻿using Cashcontrol.API.Models.Bussines;
 using Cashcontrol.API.Models.Dtos.Account;
 using Cashcontrol.API.Services.Workers.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Immutable;
 
@@ -18,6 +19,7 @@ namespace Cashcontrol.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AccountResponseDto>> CreateAccountAsync([FromBody] AccountRequestDto accountRequest)
         {
             try
@@ -32,6 +34,7 @@ namespace Cashcontrol.API.Controllers
         }
 
         [HttpPut("{email}")]
+        [Authorize]
         public async Task<ActionResult<AccountResponseDto>> UpdateAccountAsync(string email, [FromBody]AccountUpdateRequestDto account)
         {
             try
@@ -44,7 +47,9 @@ namespace Cashcontrol.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AccountResponseDto>> GetAccountByIdAsync(Guid id)
         {
             try
@@ -62,6 +67,7 @@ namespace Cashcontrol.API.Controllers
             }
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IImmutableList<AccountResponseDto>>> GetAllAccountsAsync()
         {
             try
@@ -75,6 +81,7 @@ namespace Cashcontrol.API.Controllers
             }
         }
         [HttpDelete]
+        [Authorize]
         public async Task<ActionResult<AccountResponseDto>> DeleteAccountAsync(Guid id)
         {
             try

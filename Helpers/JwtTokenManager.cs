@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace Cashcontrol.API.Helpers
 {
@@ -19,23 +20,23 @@ namespace Cashcontrol.API.Helpers
         }
         public string GenerateToken(LoginRequestDto userDto)
         {
-            List<Claim> claims = new()
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, userDto.Email),
+             new Claim(ClaimTypes.Email, userDto.Email),
                 new Claim(ClaimTypes.Name, userDto.Name)
             };
 
-            var jwtKey = _configuration.GetValue<string>("JwtSettings:SecurityKey");
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey ?? string.Empty));
+            var jwtKey = _configuration["JwtSettings:SecurityKey"]
+                         ?? throw new InvalidOperationException("Chave JWT não configurada.");
 
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var tokenDurationStr = _configuration.GetSection("JwtSettings:TokenDurationInMinutes").Value;
-            var tokenExpiringTime = double.TryParse(tokenDurationStr, out var duration) ? duration : 60; // valor padrão 60 minutos
+            var tokenDuration = _configuration.GetValue<int>("JwtSettings:TokenDurationInMinutes");
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(tokenExpiringTime),
+                expires: DateTime.UtcNow.AddMinutes(tokenDuration),
                 signingCredentials: credentials
             );
 

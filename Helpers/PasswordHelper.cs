@@ -8,7 +8,7 @@ namespace Cashcontrol.API.Helpers
     {
         public PasswordEncryptionResponse CreatePasswordHash(string password)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            using (var hmac = new System.Security.Cryptography.HMACSHA256())
             { 
                 return new PasswordEncryptionResponse(
                 passwordSalt: hmac.Key,
@@ -18,7 +18,7 @@ namespace Cashcontrol.API.Helpers
         }
         public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA256(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(storedHash);
