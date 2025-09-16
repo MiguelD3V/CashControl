@@ -25,6 +25,11 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var createdAccount = await _accountService.CreateAsync(accountRequest);
+                if (!createdAccount.Success)
+                {
+                   return BadRequest(createdAccount.Errors);
+                }
+
                 return createdAccount;
             }
             catch (Exception ex)
@@ -33,13 +38,17 @@ namespace Cashcontrol.API.Controllers
             }
         }
 
-        [HttpPut("{email}")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<AccountResponseDto>> UpdateAccountAsync(string email, [FromBody]AccountUpdateRequestDto account)
+        public async Task<ActionResult<AccountResponseDto>> UpdateAccountAsync(Guid id, [FromBody]AccountUpdateRequestDto account)
         {
             try
             {
-                var updatedAccount = await _accountService.UpdateAsync(email, account);
+                var updatedAccount = await _accountService.UpdateAsync(id, account);
+                if (!updatedAccount.Success) 
+                {
+                    return BadRequest(updatedAccount);
+                }
                 return updatedAccount;
             }
             catch (Exception ex)
@@ -55,9 +64,9 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var account = await _accountService.GetByIdAsync(id);
-                if (account == null)
+                if (!account.Success)
                 {
-                    return NotFound(new { message = "Conta não encontrada" });
+                    return NotFound(account);
                 }
                 return account;
             }
@@ -73,6 +82,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var accounts = await _accountService.GetAllAsync();
+                if (accounts == null || accounts.Count == 0)
+                {
+                    return NotFound(new { message = "Nenhuma conta encontrada" });
+                }
                 return Ok(accounts);
             }
             catch (Exception ex)
@@ -87,9 +100,9 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var deletedAccount = await _accountService.DeleteAsync(id);
-                if (deletedAccount == null)
+                if(!deletedAccount.Success)
                 {
-                    return NotFound(new { message = "Conta não encontrada" });
+                    return BadRequest(deletedAccount);
                 }
                 return deletedAccount;
             }

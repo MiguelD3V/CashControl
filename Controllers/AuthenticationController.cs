@@ -16,6 +16,7 @@ namespace Cashcontrol.API.Controllers
         }
 
         [HttpPost("Registrer")]
+
         public async Task<ActionResult> Register([FromBody] RegistrerRequestDto user)
         {  
             var registeredUser = await _service.RegisterAsync(user);

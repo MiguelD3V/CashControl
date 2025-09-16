@@ -51,7 +51,7 @@ namespace Cashcontrol.API.Services.Workers
                 Id = userModel.Id.GetHashCode(),
                 Username = userModel.Name,
                 Email = userModel.Email,
-                Role = "User"
+                CreatedAt = userModel.CreatedAt
             };
         }
         public async Task<AuthResponseDto> LoginAsync(LoginRequestDto user)
@@ -103,6 +103,7 @@ namespace Cashcontrol.API.Services.Workers
             // Sucesso na autenticação
             return new AuthResponseDto
             {
+                UserId = existingUser.Id,
                 Success = true,
                 Message = "Login realizado com sucesso.",
                 Token = token

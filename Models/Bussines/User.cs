@@ -21,9 +21,10 @@
 
         [Required]
         public string PasswordSalt { get; set; } = string.Empty;
-        public Guid AccountId { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        
+
+        public ICollection<Account> Accounts { get; set; } = new List<Account>();
+
     }
 }

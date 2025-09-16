@@ -85,10 +85,6 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<ImmutableList<ExpenseResponseDto>> GetAllExpensesAsync()
         {
             var expenses = await _expenseRepository.GetAll();
-            if (expenses == null || !expenses.Any())
-            {
-                throw new Exception("Nenhuma despesa foi encontrada.");
-            }
             expenses.ToImmutableList<Expense>();
 
             return expenses
@@ -107,10 +103,6 @@ namespace Cashcontrol.API.Services.Workers
         public async  Task<ExpenseResponseDto> GetExpenseById(Guid id)
         {
             var expense = await _expenseRepository.GetById(id);
-            if (expense == null)
-            {
-                throw new Exception($"Despesa com ID: {id} Não foi encontrada.");
-            }
             return new ExpenseResponseDto 
             {
                 Success = true,
@@ -121,10 +113,6 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<ExpenseResponseDto> GetExpenseByName(string name)
         {
             var expense = await _expenseRepository.GetByName(name);
-            if (expense == null)
-            {
-                throw new Exception($"Despesa com nome: {name} Não foi encontrada.");
-            }
             return new ExpenseResponseDto
             { 
                 Success = true,

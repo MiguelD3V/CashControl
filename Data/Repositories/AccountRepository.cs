@@ -29,13 +29,6 @@ namespace Cashcontrol.API.Data.Repositories
             var accounts = await _context.Accounts.ToListAsync();
             return [.. accounts];
         }
-
-        public async Task<Account> GetByEmailAsync(string email)
-        {
-            var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Email == email);
-            return account ?? throw new Exception($"A Conta com o email {email} não foi encontrada.");
-        }
-
         public async Task<Account> GetByIdAsync(Guid id)
         {
            var account =  await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id);

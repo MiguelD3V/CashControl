@@ -69,25 +69,6 @@ namespace Cashcontrol.API.Services.Validators
             return response;
         }
 
-        public ExpenseResponseDto ValidateToGet(Guid id)
-        {
-            var response = new ExpenseResponseDto
-            {
-                Errors = new List<string>()
-            };
-            if (id == Guid.Empty)
-            {
-                response.Success = false;
-                response.Errors.Add("O ID não pode estar vazio");
-            }
-            else
-            {
-                response.Success = true;
-                response.Data = new Expense { Id = id };
-            }
-            return response;
-        }
-
         public ExpenseResponseDto ValidateToUpdate(Expense expense)
         {
            var response = new ExpenseResponseDto

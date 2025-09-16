@@ -59,29 +59,17 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IImmutableList<AccountResponseDto>> GetAllAsync()
         {
             var accounts = await _accountRepository.GetAllAsync();
-             
             
             return accounts
                 .Select(Account => new AccountResponseDto
                 {
                     Name = Account.Name,
                     Type = Account.Type,
-                    Email = Account.Email,
+                    UserId = Account.UserId,
                     Balance = Account.Balance,
                     CreatedAt = Account.CreatedAt
 
                 }).ToList().ToImmutableList();
-        }
-
-        public async Task<AccountResponseDto> GetByEmailAsync(string email)
-        {
-            var account = await _accountRepository.GetByEmailAsync(email);
-            if (account == null)
-            {
-                throw new Exception($"Conta com email: {email} não foi encontrada.");
-            }
-            var accountDto = _mapper.Map<AccountResponseDto>(account);
-            return accountDto;
         }
 
         public async Task<AccountResponseDto> GetByIdAsync(Guid id)
@@ -97,9 +85,9 @@ namespace Cashcontrol.API.Services.Workers
         }
 
 
-        public async Task<AccountResponseDto> UpdateAsync(string email, AccountUpdateRequestDto account)
+        public async Task<AccountResponseDto> UpdateAsync(Guid id, AccountUpdateRequestDto account)
         {
-            var findAccount = await _accountRepository.GetByEmailAsync(email);
+            var findAccount = await _accountRepository.GetByIdAsync(id);
             if (findAccount == null)
             {
                 return new AccountResponseDto

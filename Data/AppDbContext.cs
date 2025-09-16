@@ -20,20 +20,11 @@ namespace Cashcontrol.API.Banco
                 entity.HasKey(a => a.Id);
                 entity.Property(a => a.Name).IsRequired().HasMaxLength(100);
                 entity.Property(a => a.Type).HasConversion<string>();
-                entity.Property(a => a.Email).IsRequired().HasMaxLength(255);
-                entity.HasIndex(a => a.Email).IsUnique().HasDatabaseName("IX_Accounts_Email");
                 entity.Property(a => a.Balance).HasColumnType("decimal(18,2)");
                 entity.Property(a => a.CreatedAt).IsRequired();
-
-                entity.HasMany(a => a.Expenses)
-                      .WithOne(e => e.Account!)
-                      .HasForeignKey(e => e.AccountId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(a => a.Incomes)
-                      .WithOne(i => i.Account!)
-                      .HasForeignKey(i => i.AccountId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(a => a.UserId).IsRequired();
+                entity.HasMany(a => a.Expenses).WithOne(e => e.Account!).HasForeignKey(e => e.AccountId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(a => a.Incomes).WithOne(i => i.Account!).HasForeignKey(i => i.AccountId).OnDelete(DeleteBehavior.Cascade);
             });
 
             // Tabela de Expenses
@@ -69,8 +60,12 @@ namespace Cashcontrol.API.Banco
                 entity.HasIndex(u => u.Email).IsUnique().HasDatabaseName("IX_Users_Email");
                 entity.Property(u => u.PasswordHash).IsRequired();
                 entity.Property(u => u.PasswordSalt).IsRequired();
-                entity.HasKey(u => u.AccountId);
                 entity.Property(u => u.CreatedAt).IsRequired();
+
+                entity.HasMany(u => u.Accounts)
+                      .WithOne()
+                      .HasForeignKey(a => a.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
 

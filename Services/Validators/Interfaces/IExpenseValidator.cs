@@ -8,7 +8,6 @@ namespace Cashcontrol.API.Services.Validators.Interfaces
         public ExpenseResponseDto ValidateToCreate(Expense expense);
         public ExpenseResponseDto ValidateToUpdate(Expense expense);
         public ExpenseResponseDto ValidateToDelete(Guid id);
-        public ExpenseResponseDto ValidateToGet(Guid id);
 
     }
 }

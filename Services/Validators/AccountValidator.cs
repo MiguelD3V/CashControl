@@ -25,10 +25,10 @@ namespace Cashcontrol.API.Services.Validators
                 response.Errors.Add("O nome da conta não pode ser nulo");
                 return response;
             }
-            if(Regex.IsMatch(account.Email ?? string.Empty, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") == false)
+            if(account.UserId == Guid.Empty)
             {
                 response.Success = false;
-                response.Errors.Add("Formato de email invalido");
+                response.Errors.Add("O Id do usuario não pode ser nulo");
                 return response;
             }
 
