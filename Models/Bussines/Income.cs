@@ -5,6 +5,7 @@ namespace Cashcontrol.API.Models.Bussines
     public class Income
     {
         public Guid Id { get; set; }
+        public string Name { get; set; } = String.Empty;
         public string? Description { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }

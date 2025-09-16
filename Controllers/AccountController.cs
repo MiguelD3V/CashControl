@@ -25,9 +25,14 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var createdAccount = await _accountService.CreateAsync(accountRequest);
+                List<string> errors = new List<string>();
+                foreach (var error in createdAccount.Errors)
+                {
+                    errors.Add(error);
+                }
                 if (!createdAccount.Success)
                 {
-                   return BadRequest(createdAccount.Errors);
+                   return BadRequest(errors);
                 }
 
                 return createdAccount;
@@ -45,9 +50,14 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var updatedAccount = await _accountService.UpdateAsync(id, account);
+                List<string> errors = new List<string>();
+                foreach (var error in updatedAccount.Errors)
+                {
+                    errors.Add(error);
+                }
                 if (!updatedAccount.Success) 
                 {
-                    return BadRequest(updatedAccount);
+                    return BadRequest(errors);
                 }
                 return updatedAccount;
             }
@@ -66,7 +76,7 @@ namespace Cashcontrol.API.Controllers
                 var account = await _accountService.GetByIdAsync(id);
                 if (!account.Success)
                 {
-                    return NotFound(account);
+                    return NotFound(new { message = "Nenhuma conta encontrada" });
                 }
                 return account;
             }
@@ -100,9 +110,14 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var deletedAccount = await _accountService.DeleteAsync(id);
-                if(!deletedAccount.Success)
+                List<string> errors = new List<string>();
+                foreach (var error in deletedAccount.Errors)
                 {
-                    return BadRequest(deletedAccount);
+                    errors.Add(error);
+                }
+                if (!deletedAccount.Success)
+                {
+                    return BadRequest(errors);
                 }
                 return deletedAccount;
             }

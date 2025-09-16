@@ -42,11 +42,6 @@ namespace Cashcontrol.API.Services.Workers
 
             account.Balance -= expense.Amount;
 
-            if (expense == null)
-            {
-                throw new ArgumentNullException(nameof(expense), "A despesa não pode ser nula");
-            }
-
             expenseModel.Date = DateTime.Now;
 
             await _expenseRepository.Create(expenseModel);
@@ -54,7 +49,7 @@ namespace Cashcontrol.API.Services.Workers
             return new ExpenseResponseDto 
             {
                 Success = true,
-                Data = expenseModel,
+                Data = expenseModel
             };
 
         }
@@ -66,10 +61,7 @@ namespace Cashcontrol.API.Services.Workers
                 throw new ArgumentException("Id Inválido", nameof(id));
             }
             var getExpense = await _expenseRepository.GetById(id);
-            if (getExpense == null)
-            {
-                throw new Exception($"A depesa com Id{id} não foi encontrada.");
-            }
+          
             var account = await _accountRepository.GetByIdAsync(getExpense.AccountId);
             account.Balance += getExpense.Amount;
 
@@ -95,7 +87,8 @@ namespace Cashcontrol.API.Services.Workers
                         Date = Expense.Date,
                         Amount = Expense.Amount,
                         AccountId = Expense.AccountId,
-                        Category = Expense.Category
+                        Category = Expense.Category,
+                        Data = expenses
 
                 }).ToList().ToImmutableList();
         }
@@ -103,6 +96,7 @@ namespace Cashcontrol.API.Services.Workers
         public async  Task<ExpenseResponseDto> GetExpenseById(Guid id)
         {
             var expense = await _expenseRepository.GetById(id);
+          
             return new ExpenseResponseDto 
             {
                 Success = true,
@@ -113,26 +107,12 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<ExpenseResponseDto> GetExpenseByName(string name)
         {
             var expense = await _expenseRepository.GetByName(name);
+
             return new ExpenseResponseDto
             { 
                 Success = true,
                 Data = expense
             };
-        }
-
-        public Task<ExpenseResponseDto> GetExpensesByCategoryAsync(string category)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<decimal> GetExpensesByDateRangeAsync(DateTime startDate, DateTime endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ExpenseResponseDto> GetExpensesByPaymentMethodAsync(string paymentMethod)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ExpenseResponseDto> UpdateExpenseAsync(Guid id, ExpenseRequestDto expense)
@@ -150,11 +130,6 @@ namespace Cashcontrol.API.Services.Workers
                     Success = false,
                     Errors = validation.Errors
                 };
-            }
-
-            if (existingExpense == null)
-            {
-                throw new Exception($"Despesa com ID:{id} não foi encontrada.");
             }
 
             var diference = existingExpense.Amount - expense.Amount;

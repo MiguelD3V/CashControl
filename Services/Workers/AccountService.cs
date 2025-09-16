@@ -35,6 +35,7 @@ namespace Cashcontrol.API.Services.Workers
             }
 
             var account = _mapper.Map<Account>(accountDto);
+            account.CreatedAt = DateTime.UtcNow;
 
             await _accountRepository.CreateAsync(account);
 
@@ -67,7 +68,8 @@ namespace Cashcontrol.API.Services.Workers
                     Type = Account.Type,
                     UserId = Account.UserId,
                     Balance = Account.Balance,
-                    CreatedAt = Account.CreatedAt
+                    CreatedAt = Account.CreatedAt,
+                    Data = accounts
 
                 }).ToList().ToImmutableList();
         }
@@ -80,6 +82,7 @@ namespace Cashcontrol.API.Services.Workers
                 throw new Exception($"Conta com ID {id} não foi encontrada.");
             }
             var accountDto = _mapper.Map<AccountResponseDto>(account);
+            accountDto.Data = account;
 
             return accountDto;
         }

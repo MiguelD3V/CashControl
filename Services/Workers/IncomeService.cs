@@ -3,6 +3,8 @@ using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Data.Repositories;
 using Cashcontrol.API.Mapping;
 using Cashcontrol.API.Models.Bussines;
+using Cashcontrol.API.Models.Dtos.Account;
+using Cashcontrol.API.Models.Dtos.Expense;
 using Cashcontrol.API.Models.Dtos.Income;
 using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers.Interfaces;
@@ -53,14 +55,7 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IncomeResponseDto> DeleteAsync(Guid id)
         {
             var incomeFind = await _incomeRepository.GetByIdAsync(id);
-            if (incomeFind == null)
-            {
-                return new IncomeResponseDto
-                {
-                    Success = false,
-                    Errors = new List<string> { "Receita não encontrada" }
-                };
-            }
+         
             var incomeModel =  _mapper.Map<Income>(incomeFind);
 
             var account = await _accountRepository.GetByIdAsync(incomeModel.AccountId);
@@ -86,21 +81,26 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IImmutableList<IncomeResponseDto>> GetAllAsync()
         {
             var incomes = await _incomeRepository.GetAllAsync();
-            var incomeDtos = _mapper.Map<List<IncomeResponseDto>>(incomes);
-            return incomeDtos.ToImmutableList();
+            incomes.ToImmutableList<Income>();
+
+            return incomes
+                .Select(Income => new IncomeResponseDto
+                {
+                    Name = Income.Name,
+                    Description = Income.Description,
+                    Date = Income.Date,
+                    Amount = Income.Amount,
+                    AccountId = Income.AccountId,
+                    Source = Income.Source,
+                    Data = incomes
+
+                }).ToList().ToImmutableList();
         }
 
         public async Task<IncomeResponseDto> GetByIdAsync(Guid id)
         {
             var income = await _incomeRepository.GetByIdAsync(id);
-            if (income == null)
-            {
-                return new IncomeResponseDto
-                { 
-                     Success = false,
-                     Errors = new List<string> { "Receita não encontrada" }
-                };
-            }
+ 
             var incomeDto = _mapper.Map<IncomeResponseDto>(income);
             return  new IncomeResponseDto
             {
@@ -112,14 +112,7 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IncomeResponseDto> UpdateAsync(IncomeRequestDto income, Guid id)
         {
             var incomeFind = _incomeRepository.GetByIdAsync(id);
-            if (incomeFind == null)
-            {
-                return (new IncomeResponseDto
-                {
-                    Success = false,
-                    Errors = new List<string> { "Receita não encotrada" }
-                });
-            }
+        
             var validation = _incomeValidator.ValidateToUpdateAsync(income, id);
             if (!validation.Success)
             {
