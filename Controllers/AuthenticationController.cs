@@ -20,6 +20,11 @@ namespace Cashcontrol.API.Controllers
         public async Task<ActionResult> Register([FromBody] RegistrerRequestDto user)
         {  
             var registeredUser = await _service.RegisterAsync(user);
+
+            if (!registeredUser.Success)
+            {
+                return BadRequest(registeredUser.Errors.ToList());
+            }
             
             return Ok(registeredUser);
         }
@@ -28,6 +33,10 @@ namespace Cashcontrol.API.Controllers
         public async Task<ActionResult> Login([FromBody] LoginRequestDto user)
         {
             var loggedInUser = await _service.LoginAsync(user);
+            if (!loggedInUser.Success)
+            {
+                return BadRequest(loggedInUser.Errors.ToList());
+            }
             return Ok(loggedInUser);
         }
     }

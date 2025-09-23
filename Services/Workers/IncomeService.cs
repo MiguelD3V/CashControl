@@ -40,12 +40,13 @@ namespace Cashcontrol.API.Services.Workers
             var incomeDto = _mapper.Map<Income>(income);
 
             var account = _accountRepository.GetByIdAsync(income.AccountId);
-            account.Result.Balance += income.Amount;
 
             incomeDto.Date = DateTime.UtcNow;
 
             await _accountRepository.UpdateAsync(account.Result);
             await _incomeRepository.CreateAsync(incomeDto);
+
+            account.Result.Balance += income.Amount;
             return new IncomeResponseDto
             {
                 Success = true,
@@ -86,12 +87,6 @@ namespace Cashcontrol.API.Services.Workers
             return incomes
                 .Select(Income => new IncomeResponseDto
                 {
-                    Name = Income.Name,
-                    Description = Income.Description,
-                    Date = Income.Date,
-                    Amount = Income.Amount,
-                    AccountId = Income.AccountId,
-                    Source = Income.Source,
                     Data = incomes
 
                 }).ToList().ToImmutableList();

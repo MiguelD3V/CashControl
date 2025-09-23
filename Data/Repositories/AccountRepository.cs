@@ -41,7 +41,6 @@ namespace Cashcontrol.API.Data.Repositories
             return account ?? throw new Exception($"A Conta com o nome {name} não foi encontrada.");
         }
 
-
         public async Task<Account?> UpdateAsync(Account account)
         {
             _context.Accounts.Update(account);

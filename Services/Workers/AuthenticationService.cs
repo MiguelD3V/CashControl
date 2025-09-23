@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cashcontrol.API.Services.Workers
 {
-    public class UserService : IUserService
+    public class AuthenticationService : IUserService
     {
         private readonly IUserValidator _userValidator;
         private readonly IPasswordHelper _passwordHasher;
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenManager _jwtTokenManager;
-        public UserService(IUserValidator userValidator, IPasswordHelper passwordHelper, IUserRepository userRepository, IJwtTokenManager jwtTokenManager)
+        public AuthenticationService(IUserValidator userValidator, IPasswordHelper passwordHelper, IUserRepository userRepository, IJwtTokenManager jwtTokenManager)
         {
             _userValidator = userValidator;
             _passwordHasher = passwordHelper;
@@ -48,7 +48,7 @@ namespace Cashcontrol.API.Services.Workers
             {
                 Success = true,
                 Message = "Usuário registrado com sucesso.",
-                Id = userModel.Id.GetHashCode(),
+                Id = userModel.Id,
                 Username = userModel.Name,
                 Email = userModel.Email,
                 CreatedAt = userModel.CreatedAt
@@ -69,15 +69,6 @@ namespace Cashcontrol.API.Services.Workers
             }
 
             var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
-            if (existingUser == null)
-            {
-                return new AuthResponseDto
-                {
-                    Success = false,
-                    Message = "Usuário não encontrado.",
-                    Errors = new List<string> { "Usuário não encontrado." }
-                };
-            }
 
             var isPasswordValid = _passwordHasher.VerifyPasswordHash(
                 user.Password,
@@ -91,7 +82,7 @@ namespace Cashcontrol.API.Services.Workers
                 {
                     Success = false,
                     Message = "Senha incorreta.",
-                    Errors = new List<string> { "Senha incorreta." }
+                    Errors = ["Senha incorreta."]
                 };
             }
             var token = _jwtTokenManager.GenerateToken(new LoginRequestDto
@@ -100,7 +91,6 @@ namespace Cashcontrol.API.Services.Workers
                 Name = existingUser.Name,
             });
 
-            // Sucesso na autenticação
             return new AuthResponseDto
             {
                 UserId = existingUser.Id,

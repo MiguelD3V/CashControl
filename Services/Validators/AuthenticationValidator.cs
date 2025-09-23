@@ -5,11 +5,11 @@ using Cashcontrol.API.Services.Validators.Interfaces;
 
 namespace Cashcontrol.API.Services.Validators
 {
-    public class UserValidator : IUserValidator
+    public class AuthenticationValidator : IUserValidator
     {
         private readonly IUserRepository _userRepository;
 
-        public UserValidator(IUserRepository repository)
+        public AuthenticationValidator(IUserRepository repository)
         {
             _userRepository = repository;
 
@@ -24,13 +24,13 @@ namespace Cashcontrol.API.Services.Validators
             {
                 response.Success = false;
                 response.Message = "Validation failed.";
-                response.Errors.Add("Email and Password are required.");
+                response.Errors.Add("Os campos de senha e email são obrigatórios");
             }
             if(findUser == null)
             {
                 response.Success = false;
                 response.Message = "Validation failed.";
-                response.Errors.Add("User not found.");
+                response.Errors.Add("Usuário não encontrado.");
             }
        
             return response;
@@ -45,13 +45,13 @@ namespace Cashcontrol.API.Services.Validators
             {
                 response.Success = false;
                 response.Message = "Validation failed.";
-                response.Errors.Add("Email, Password and Name are required.");
+                response.Errors.Add("Email, Password e nome são obrigatórios.");
             }
             if (findUser != null)
             {
                 response.Success = false;
                 response.Message = "Validation failed.";
-                response.Errors.Add("Email already in use.");
+                response.Errors.Add("Esse email já esta em uso");
             }
             return response;
         }

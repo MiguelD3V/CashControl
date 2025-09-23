@@ -82,12 +82,6 @@ namespace Cashcontrol.API.Services.Workers
             return expenses
                 .Select(Expense => new ExpenseResponseDto
                 {
-                        Name = Expense.Name,
-                        Description = Expense.Description,
-                        Date = Expense.Date,
-                        Amount = Expense.Amount,
-                        AccountId = Expense.AccountId,
-                        Category = Expense.Category,
                         Data = expenses
 
                 }).ToList().ToImmutableList();

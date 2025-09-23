@@ -44,6 +44,7 @@ namespace Cashcontrol.API.Banco
             {
                 entity.ToTable("Incomes");
                 entity.HasKey(i => i.Id);
+                entity.Property(i => i.Name).IsRequired().HasMaxLength(100);
                 entity.Property(i => i.Description).HasMaxLength(255);
                 entity.Property(i => i.Amount).HasColumnType("decimal(18,2)").IsRequired();
                 entity.Property(i => i.Source).HasConversion<string>();

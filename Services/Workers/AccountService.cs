@@ -60,18 +60,13 @@ namespace Cashcontrol.API.Services.Workers
         public async Task<IImmutableList<AccountResponseDto>> GetAllAsync()
         {
             var accounts = await _accountRepository.GetAllAsync();
-            
-            return accounts
-                .Select(Account => new AccountResponseDto
-                {
-                    Name = Account.Name,
-                    Type = Account.Type,
-                    UserId = Account.UserId,
-                    Balance = Account.Balance,
-                    CreatedAt = Account.CreatedAt,
-                    Data = accounts
 
-                }).ToList().ToImmutableList();
+            return accounts
+                .Select(account => new AccountResponseDto
+                {
+                    Success = true,
+                    Data = account
+                }).ToImmutableList();
         }
 
         public async Task<AccountResponseDto> GetByIdAsync(Guid id)

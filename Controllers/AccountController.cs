@@ -20,27 +20,17 @@ namespace Cashcontrol.API.Controllers
 
         [HttpPost]
         [Authorize]
+
         public async Task<ActionResult<AccountResponseDto>> CreateAccountAsync([FromBody] AccountRequestDto accountRequest)
         {
-            try
-            {
-                var createdAccount = await _accountService.CreateAsync(accountRequest);
-                List<string> errors = new List<string>();
-                foreach (var error in createdAccount.Errors)
-                {
-                    errors.Add(error);
-                }
+            var createdAccount = await _accountService.CreateAsync(accountRequest);          
+                
                 if (!createdAccount.Success)
                 {
-                   return BadRequest(errors);
+                   return BadRequest(createdAccount.Errors.ToList());
                 }
 
                 return createdAccount;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
         }
 
         [HttpPut("{id}")]
@@ -50,14 +40,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var updatedAccount = await _accountService.UpdateAsync(id, account);
-                List<string> errors = new List<string>();
-                foreach (var error in updatedAccount.Errors)
-                {
-                    errors.Add(error);
-                }
+               
                 if (!updatedAccount.Success) 
                 {
-                    return BadRequest(errors);
+                    return BadRequest(updatedAccount.Errors.ToList());
                 }
                 return updatedAccount;
             }
@@ -110,14 +96,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var deletedAccount = await _accountService.DeleteAsync(id);
-                List<string> errors = new List<string>();
-                foreach (var error in deletedAccount.Errors)
-                {
-                    errors.Add(error);
-                }
+          
                 if (!deletedAccount.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(deletedAccount.Errors.ToList());
                 }
                 return deletedAccount;
             }

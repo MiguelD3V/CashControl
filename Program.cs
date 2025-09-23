@@ -1,23 +1,24 @@
 using Cashcontrol.API.Banco;
 using Cashcontrol.API.Banco.Interfaces;
 using Cashcontrol.API.Banco.Repositories;
+using Cashcontrol.API.Controllers;
 using Cashcontrol.API.Data.Interfaces;
 using Cashcontrol.API.Data.Repositories;
+using Cashcontrol.API.Helpers;
+using Cashcontrol.API.Helpers.Interface;
 using Cashcontrol.API.Mapping;
 using Cashcontrol.API.Services.Validators;
 using Cashcontrol.API.Services.Validators.Interfaces;
 using Cashcontrol.API.Services.Workers;
 using Cashcontrol.API.Services.Workers.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Cashcontrol.API.Controllers;
-using Cashcontrol.API.Helpers.Interface;
-using Cashcontrol.API.Helpers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,8 +60,8 @@ builder.Services.AddScoped<IIncomeValidator, IncomeValidator>();
 
 //User dependencies
 #region
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserValidator, UserValidator>();
+builder.Services.AddScoped<IUserService, AuthenticationService>();
+builder.Services.AddScoped<IUserValidator, AuthenticationValidator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
 builder.Services.AddScoped<IJwtTokenManager, JwtTokenManager>();
@@ -113,6 +114,30 @@ builder.Services.AddSwaggerGen(options =>
             new string[] {}
         }
     });
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .Select(e => new
+            {
+                field = e.Key,
+                description = e.Value.Errors.First().ErrorMessage
+            }).ToList();
+
+        var response = new
+        {
+            status = 400,
+            message = "Não foi possível processar sua solicitação. Corrija os campos abaixo:",
+            errors,
+            traceId = context.HttpContext.TraceIdentifier
+        };
+
+        return new BadRequestObjectResult(response);
+    };
 });
 
 

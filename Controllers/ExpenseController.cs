@@ -27,14 +27,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var createdExpense = await _expenseService.CreateExpenseAsync(expense);
-                List<string> errors = new List<string>();
-                foreach (var error in createdExpense.Errors)
-                {
-                    errors.Add(error);
-                }
+            
                 if (!createdExpense.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(createdExpense.Errors.ToList());
                 }
                 return createdExpense;
             }
@@ -53,14 +49,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var updatedExpense = await _expenseService.UpdateExpenseAsync(id, expense);
-                List<string> errors = new List<string>();
-                foreach (var error in updatedExpense.Errors)
-                {
-                    errors.Add(error);
-                }
+              
                 if (!updatedExpense.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(updatedExpense.Errors.ToList());
                 }
                 return updatedExpense;
             }
@@ -77,14 +69,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var deletedExpense = await _expenseService.DeleteExpenseAsync(id);
-                List<string> errors = new List<string>();
-                foreach (var error in deletedExpense.Errors)
-                {
-                    errors.Add(error);
-                }
+               
                 if (!deletedExpense.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(deletedExpense.Errors.ToList());
                 }
                 return deletedExpense;
             }

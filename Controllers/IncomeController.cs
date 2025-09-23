@@ -22,14 +22,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var createdIncome = await _incomeService.CreateAsync(income);
-                List<string> errors = new List<string>();
-                foreach (var error in createdIncome.Errors)
-                {
-                    errors.Add(error);
-                }
+               
                 if (!createdIncome.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(createdIncome.Errors.ToList());
                 }
                 return createdIncome;
             }
@@ -46,14 +42,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var updatedIncome = await _incomeService.UpdateAsync(income, id);
-                List<string> errors = new List<string>();
-                foreach (var error in updatedIncome.Errors)
-                {
-                    errors.Add(error);
-                }
+              
                 if (!updatedIncome.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(updatedIncome.Errors.ToList());
                 }
                 return updatedIncome;
             }
@@ -70,14 +62,10 @@ namespace Cashcontrol.API.Controllers
             try
             {
                 var deletedIncome = await _incomeService.DeleteAsync(id);
-                List<string> errors = new List<string>();
-                foreach (var error in deletedIncome.Errors)
-                {
-                    errors.Add(error);
-                }
+               
                 if (!deletedIncome.Success)
                 {
-                    return BadRequest(errors);
+                    return BadRequest(deletedIncome.Errors.ToList());
                 }
                 return deletedIncome;
             }

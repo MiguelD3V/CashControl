@@ -19,13 +19,13 @@ namespace Cashcontrol.API.Services.Validators
                 response.Errors.Add("A conta não pode ser nula");
                 return response;
             }
-            if(account.Name == null)
+            if (string.IsNullOrWhiteSpace(account.Name))
             {
                 response.Success = false;
-                response.Errors.Add("O nome da conta não pode ser nulo");
+                response.Errors.Add("O nome da conta não pode ser nulo ou vazio");
                 return response;
             }
-            if(account.UserId == Guid.Empty)
+            if (account.UserId == Guid.Empty)
             {
                 response.Success = false;
                 response.Errors.Add("O Id do usuario não pode ser nulo");
@@ -93,7 +93,7 @@ namespace Cashcontrol.API.Services.Validators
                 response.Errors.Add("A conta não pode ser nula");
                 return response;
             }
-            if (account.Name == null)
+            if (string.IsNullOrEmpty(account.Name))
             {
                 response.Success = false;
                 response.Errors.Add("o Nome da conta não pode ser nulo");
